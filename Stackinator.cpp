@@ -29,6 +29,6 @@ public:
 	void push(Item i) { head = new Stackinator(i, head) };
 	Item pop() {
 		Item i = head->item; Stackinator *s = head->next;
-		delete head; head = s; return v;
+		delete head; head = s; return i;
 	}
 };
