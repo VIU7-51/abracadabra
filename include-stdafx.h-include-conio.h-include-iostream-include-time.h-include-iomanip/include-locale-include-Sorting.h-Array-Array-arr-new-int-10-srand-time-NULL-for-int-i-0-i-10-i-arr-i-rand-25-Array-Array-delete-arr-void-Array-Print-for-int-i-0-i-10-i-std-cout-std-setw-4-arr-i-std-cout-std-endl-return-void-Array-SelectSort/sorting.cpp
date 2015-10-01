@@ -53,3 +53,17 @@
 		}
 		return;
 	}
+	
+	void Array::BubbleSort() {
+		int temp;
+		for (int j, i = 0; i < SIZE; i++) {
+			for ( j = SIZE - 1; j > 0; j--) {
+				if (arr[j] < arr[j - 1]) {
+					temp = arr[j];
+					arr[j] = arr[j - 1];
+					arr[j - 1] = temp;
+				}
+			}
+		}
+		return;
+	}
