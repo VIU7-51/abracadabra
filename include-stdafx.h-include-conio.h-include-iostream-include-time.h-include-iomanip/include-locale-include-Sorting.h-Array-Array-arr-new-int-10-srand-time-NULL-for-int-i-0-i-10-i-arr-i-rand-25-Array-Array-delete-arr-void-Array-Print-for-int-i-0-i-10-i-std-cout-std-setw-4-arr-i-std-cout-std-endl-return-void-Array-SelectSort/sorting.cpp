@@ -43,16 +43,13 @@
 		{
 			k = i;
 			temp = arr[i];
-			for (j = i + 1; j < 10; j++)
-				if (arr[j] < temp)
-				{
-					k = j;
-					temp = arr[j];
-					std::cout << "k = " << k << '\t' << "j = " << j << std::endl;
-					std::cout << "temp = " << temp << '\t' << "(j)arr[" << j << "] = " << arr[j] << std::endl;
-				}
-				arr[k] = arr[i];
-				arr[i] = temp;
+			for (j = i + 1; j < 10; j++) if (arr[j] < temp)
+							{
+								k = j;
+								temp = arr[j];
+							}
+			arr[k] = arr[i];
+			arr[i] = temp;
 		}
 		return;
 	}
