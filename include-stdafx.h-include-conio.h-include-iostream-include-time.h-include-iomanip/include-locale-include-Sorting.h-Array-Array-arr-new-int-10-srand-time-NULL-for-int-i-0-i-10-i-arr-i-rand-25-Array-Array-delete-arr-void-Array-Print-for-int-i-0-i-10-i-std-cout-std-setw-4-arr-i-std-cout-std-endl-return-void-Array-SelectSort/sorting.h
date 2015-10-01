@@ -17,7 +17,8 @@
 		~Array();
 		void Print();
 		void SelectSort();
-		//void BubbleSort();
+		void BubbleSort();
+		//void ShakerSort();
 		//void InsertSort();
 		//void ShellSort();
 	};
