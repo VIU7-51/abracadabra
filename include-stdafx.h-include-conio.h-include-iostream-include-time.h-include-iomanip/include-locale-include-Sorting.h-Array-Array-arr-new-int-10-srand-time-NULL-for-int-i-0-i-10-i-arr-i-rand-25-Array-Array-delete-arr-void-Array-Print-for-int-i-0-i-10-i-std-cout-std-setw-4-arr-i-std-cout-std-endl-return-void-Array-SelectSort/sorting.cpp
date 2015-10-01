@@ -41,12 +41,9 @@
 		int temp;
 		for (i = 0; i < 10; i++)
 		{
-			k = i; 
-			std::cout << "k = " << k << '\t' << "i = " << i << std::endl;
+			k = i;
 			temp = arr[i];
-			std::cout << "temp = " << temp << '\t' << "(i)arr[" << i << "] = " << arr[i] << std::endl;
 			for (j = i + 1; j < 10; j++)
-			{
 				if (arr[j] < temp)
 				{
 					k = j;
@@ -55,10 +52,7 @@
 					std::cout << "temp = " << temp << '\t' << "(j)arr[" << j << "] = " << arr[j] << std::endl;
 				}
 				arr[k] = arr[i];
-				std::cout << "(k)arr[" << k << "] = " << temp << '\t' << "(i)arr[" << i << "] = " << arr[i] << std::endl;
 				arr[i] = temp;
-				std::cout << "(i)arr[" << i << "] = " << arr[i] << '\t' << "temp = " << temp << std::endl;
-			}
 		}
 		return;
 	}
