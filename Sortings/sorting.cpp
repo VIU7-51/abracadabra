@@ -67,3 +67,11 @@
 		}
 		return;
 	}
+
+	void Array::InsertSort() {
+		int temp;
+		for (int j, i=0, i < SIZE, i++) {
+			for (j=i-1, j >= 0 && a[j] > x, j-- ) a[j+1] = a[j];
+			a[j+1] = temp;
+		}
+	}
