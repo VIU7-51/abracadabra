@@ -1,12 +1,9 @@
-#include "stdafx.h"
 #include <conio.h>
+#include <iomanip>
 #include <iostream>
 #include <time.h>
-#include <iomanip>
-
-//#include <locale>
-
 #include "Sorting.h"
+#include "stdafx.h"
 
 	
 	Array::Array() {
