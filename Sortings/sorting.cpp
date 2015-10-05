@@ -67,11 +67,34 @@
 		}
 		return;
 	}
-
+	
+	void Array::ShakerSort() {
+		int i, j = SIZE-1;
+  		int left = 1, right = SIZE-1;
+  		int temp;
+  		do {
+		    for( i = right; i > 0; i-- ) {
+      			if ( arr[i - 1] > arr[i] ) {
+        		    temp = arr[i - 1]; arr[i - 1] = arr[i]; arr[i]=temp;
+        		    j = i;
+      		    	}
+    	   	    }
+		    left = j + 1;
+		    for (i = 1; i <= right; j++) {
+      			if ( arr[i - 1] > arr[i] ) {
+			    temp = arr[i - 1]; arr[i - 1] = arr[i];
+			    arr[i] = temp;
+        		    j = i;
+			}
+    		    }
+		    right = j - 1;
+  		} while ( left < right );
+	}
+	
 	void Array::InsertSort() {
 		int temp;
-		for (int j, i=0, i < SIZE, i++) {
-			for (j=i-1, j >= 0 && a[j] > x, j-- ) a[j+1] = a[j];
-			a[j+1] = temp;
+		for (int j, i = 0, i < SIZE, i++) {
+			for (j = i  -1, j >= 0 && arr[j] > x, j-- ) arr[j + 1] = arr[j];
+			arr[j + 1] = temp;
 		}
 	}
