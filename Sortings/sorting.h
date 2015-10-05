@@ -2,11 +2,12 @@
 
 #ifndef SORTING_H
 #define SORTING_H
-//#pragma once
-#include "targetver.h"
-#include "stdafx.h"
+
 #include <stdio.h>
 #include <tchar.h>
+#include "targetver.h"
+#include "stdafx.h"
+
 
 //namespace Massive {
 	
@@ -22,7 +23,7 @@
 		void BubbleSort();  //сортировка пузырьком
 		void ShakerSort();  //шейрек-сортировка
 		void InsertSort();  //сортировка простыми вставками
-		void ShellSort();   //сортировка Шелла
+		//void ShellSort();   //сортировка Шелла
 	};
 
 //} //namespace Massive
