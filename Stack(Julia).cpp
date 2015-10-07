@@ -14,7 +14,7 @@ public:
 		return first == NULL;
 	}
 	void push(T item){
-		Node<T>* old = first;
+		Node<T>* old = first; 
 		first = new Node<T>();
 		first->item = item;
 		first->next = old;
