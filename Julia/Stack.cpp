@@ -11,30 +11,47 @@ template <typename T>
 class Stack {
 public:
 	bool isEmpty(){
-		return first == NULL;
+		return node == NULL;
 	}
 	void push(T item){
-		Node<T>* old = first; 
-		first = new Node<T>();
-		first->item = item;
-		first->next = old;
+		Node<T>* old = node; 
+		node = new Node<T>();
+		node->item = item;
+		node->next = old;
 	}
 	T pop(){
-		Node<T> current = *first;
-		delete first;
+		Node<T> current = *node;
+		delete node;
 		T item = current.item;
-		first = current.next;
+		node = current.next;
 		return item;
 	}
 private:
-	Node<T> *first = NULL;
+	Node<T> *node = NULL;
 };
 
 int main() {
 	Stack<char> s;
-	for (char i = 'a'; i <= 'f'; i++) 
-		s.push(i);
-	for (;!s.isEmpty();)
-		std::cout<<s.pop()<<"\n";
-	return 0;
+	int choice;
+	while(1) {
+	    std::cout<<"1-Push element; 2-Pop element; 3-Exit"<<"\n";
+	    std::cin>>choice;
+		switch(choice) {
+			case 1: { 
+			    char elem; 
+			    std::cout<<"Input element: "; 
+			    std::cin>>elem;
+			    s.push(elem);
+			    break;
+			}
+			case 2: { 
+			    if (!s.isEmpty()) 
+			    	std::cout<<s.pop()<<"\n";
+			    break;
+			}
+			case 3: return 0;
+			default: 
+			std::cout<<"Wrong input"<<"\n";
+		}
+	}
 }
