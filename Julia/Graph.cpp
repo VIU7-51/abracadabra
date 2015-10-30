@@ -6,42 +6,42 @@ using namespace std;
 
 #define nameOfLink iterLinks->first
 #define weightOfLink iterLinks->second
-#define firstVertice vertices.begin()
-#define lastVertice vertices.end()
-#define firstLink (*iterVertice)->link.begin()
-#define lastLink (*iterVertice)->link.end()
-#define nameOfVertice (*iterVertice)->name
+#define firstVertex vertices.begin()
+#define lastVertex vertices.end()
+#define firstLink (*iterVertex)->link.begin()
+#define lastLink (*iterVertex)->link.end()
+#define nameOfVertex (*iterVertex)->name
 
-class Vertice {
+class Vertex {
 public:
-    Vertice() { createLinks(); }
+    Vertex() { createLinks(); }
     char name;
     map<char, int> link;
 private:
     void createLinks() {
         int randomWeight;
-        char randomVertice;
+        char randomVertex;
         for (int randNumOfLinks = 0; randNumOfLinks<(1+rand()%5); randNumOfLinks++) {
             randomWeight = 1+rand()%10;
-            randomVertice = 'A' + rand()%10;
-            if (randomVertice == name) randomVertice = 'A' + rand()%10;
-            link.insert(pair<char, int>(randomVertice,randomWeight));
+            randomVertex = 'A' + rand()%10;
+            if (randomVertex == name) randomVertex = 'A' + rand()%10;
+            link.insert(pair<char, int>(randomVertex,randomWeight));
         }
     }
 };
 class Graph {
 private:
-    vector<Vertice*> vertices;
+    vector<Vertex*> vertices;
     int cost, step;
-    vector<Vertice*>::iterator iterVertice;
+    vector<Vertex*>::iterator iterVertex;
     map<char, int>::iterator iterLinks;
 
     void createVert() {
-        Vertice *newVer = new Vertice;
+        Vertex *newVer = new Vertex;
         for (int i = 0; i<10; i++) {
             newVer->name = 'A' + i;
             vertices.push_back(newVer);
-            newVer = new Vertice;
+            newVer = new Vertex;
         }
     }
 
@@ -50,8 +50,8 @@ public:
 
     void GreedyAlg(char startOfPath, char endOfPath) {
         step++;
-        for (iterVertice = firstVertice; iterVertice != lastVertice; iterVertice++)
-            if (nameOfVertice == startOfPath) break;
+        for (iterVertex = firstVertex; iterVertex != lastVertex; iterVertex++)
+            if (nameOfVertex == startOfPath) break;
 
         int compare;
         for (iterLinks = firstLink; iterLinks != lastLink; iterLinks++) {
@@ -78,8 +78,8 @@ public:
     }
 
     void printGraph() {
-        for( iterVertice = firstVertice; iterVertice != lastVertice; iterVertice++) {
-            cout<<nameOfVertice<<endl;
+        for( iterVertex = firstVertex; iterVertex != lastVertex; iterVertex++) {
+            cout<<nameOfVertex<<endl;
             for (iterLinks = firstLink; iterLinks != lastLink; iterLinks++)
                 cout << "linked with: " << nameOfLink
                  << " edge: " << weightOfLink << endl;
