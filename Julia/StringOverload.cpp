@@ -23,10 +23,11 @@ String::String(char *c) {
 String String::operator=(char *that) {
     delete []string;
     string = that;
+    return *this;
 }
 String String::operator=(String that) {
-    delete []string;
     string = that.string;
+    return *this;
 }
 String String::operator+(String that) {
     String temp;
@@ -53,6 +54,8 @@ int main() {
     a = "Hello";
     cout<<c<<endl;
     b = a;
-    cout<<a+b;
+    c = a+b;
+    c = "dsd";
+    cout<<c;
     return 0;
 }
