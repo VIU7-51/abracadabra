@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cstdio>
-#include <vector>
+#include <cstring>
 using namespace std;
+
+#define StringSize strlen(string)+strlen(that.string)
 
 class String {
 public:
@@ -31,16 +33,11 @@ String String::operator=(String that) {
 }
 String String::operator+(String that) {
     String temp;
-    vector<char> v;
-    for(int i = 0; string[i] != 0; i++) {
-        v.push_back(string[i]);
-    }
-    for(int i = 0; that.string[i] != 0; i++) {
-        v.push_back(that.string[i]);
-    }
     delete []temp.string;
-    temp.string = new char[v.size()];
-    for(int i = 0; i<v.size(); i++) temp.string[i] = v[i];
+    temp.string = new char[StringSize];
+    int j = 0;
+    for(int i = 0; i<strlen(string); i++, j++) temp.string[j] = string[i];
+    for(int i = 0; i<strlen(that.string); i++, j++) temp.string[j] = that.string[i];
     return temp;
 }
 ostream& operator<<(ostream &os, String s) {
@@ -52,10 +49,9 @@ int main() {
     String a, b;
     String c("BAZINGA");
     a = "Hello";
-    cout<<c<<endl;
+    cout<<c+a<<endl;
     b = a;
     c = a+b;
-    c = "dsd";
-    cout<<c;
+    cout<<c<<endl;
     return 0;
 }
