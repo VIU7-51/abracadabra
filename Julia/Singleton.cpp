@@ -8,9 +8,6 @@ private:
     Singleton(Singleton const&) = delete;
     void operator=(Singleton const&) = delete;
 
-    void* operator new(std::size_t) = delete;
-    void* operator new[](std::size_t) = delete;
-
 public:
     static Singleton& getInstance(){
         static Singleton instance;
