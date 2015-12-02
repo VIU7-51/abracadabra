@@ -125,3 +125,34 @@ int main()
 
     return 0;
 }
+
+
+
+
+// double.cpp: определяет точку входа для консольного приложения.
+//
+
+#include "stdafx.h"
+#include <iostream>
+
+template <typename item>
+class node {
+private:
+	item value;
+	node<item> *next;
+	node<item> *prev;
+public:
+	node(item v, node* n, node* p) : value(v), next(n), prev(p) {}
+};
+
+template <typename item>
+class DoubleList : protected node<item> {
+private:
+	node<item> *head;
+	node<item> *tail;
+public:
+	explicit DoubleList() { head = tail = NULL; }
+
+
+
+};
