@@ -132,27 +132,114 @@ int main()
 // double.cpp: определяет точку входа для консольного приложения.
 //
 
+// double.cpp: определяет точку входа для консольного приложения.
+//
+
 #include "stdafx.h"
 #include <iostream>
 
 template <typename item>
 class node {
-private:
+public:
 	item value;
 	node<item> *next;
 	node<item> *prev;
 public:
+	node() { value = NULL, prev = next = NULL; }
 	node(item v, node* n, node* p) : value(v), next(n), prev(p) {}
 };
 
 template <typename item>
-class DoubleList : protected node<item> {
+class DoubleList : public node<item> {
 private:
 	node<item> *head;
 	node<item> *tail;
+	//int const lsize = 0;
 public:
-	explicit DoubleList() { head = tail = NULL; }
-
-
-
+	DoubleList();
+	void push_head(item);
+	void push_tail(item);
+	item pop_head(void);
+	item pop_tail(void);
+	void print(void);
 };
+
+template <class item>
+DoubleList<item>::DoubleList() {
+	head = tail = NULL;
+	//node<item> *nod = new node<item>(NULL, NULL, NULL);
+	//head = tail;
+	//tail->prev = head;
+	//head->next = tail;
+}
+
+template <class item>
+void DoubleList<item>::push_head(item value) {
+	if (head != NULL) {
+		head = new node<item>(value, head, NULL);
+	}
+	else {
+		node<item> *nod = new node<item>(value, NULL, NULL);
+		head = tail = nod;
+	}
+}
+
+template <class item>
+void DoubleList<item>::push_tail(item value) {
+	if (tail != NULL) {
+		tail = new node<item>(value, NULL, tail);
+	}
+	else {
+		node<item> *nod = new node<item>(value, NULL, NULL);
+		head = tail = nod;
+	}
+}
+
+template <class item>
+item DoubleList<item>::pop_head(void) {
+	item val = head->value;
+	node<item> *tmpn = head->next;
+	delete head;
+	head = tmpn;
+	return val;
+}
+
+template <class item>
+item DoubleList<item>::pop_tail(void) {
+	item val = tail->value;
+	node<item> *tmpn = tail->prev;
+	delete tail;
+	tail = tmpn;
+	return val;
+}
+
+template <class item>
+void DoubleList<item>::print(void) {
+	for (node<item> *curr = head; curr; curr = curr->next) {
+	}
+	std::cout << std::endl;
+}
+
+
+
+int main()
+{
+	DoubleList<int> dl;
+	dl.push_head(1);
+	dl.push_head(2);
+	dl.print();
+	dl.push_tail(3);
+	dl.push_tail(4);
+	dl.print();
+	dl.push_head(5);
+	dl.push_tail(6);
+	dl.print();
+	//int poph = dl.pop_head();
+	//int popt = dl.pop_tail();
+	std::cout << dl.pop_tail() << dl.pop_tail() << dl.pop_tail() << dl.pop_tail() << std::endl;
+	dl.print();
+	std::cin.get();
+	return 0;
+}
+
+
