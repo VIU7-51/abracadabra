@@ -1,137 +1,3 @@
-//класс неотремонтированный и не рабочий, считать черновым вариантом
-
-template <class item>
-class dualink {
-private:
-	struct node
-	{
-		item item_value;
-		node *next;
-		node *prev;
-	};
-
-	long position;
-	node *slider;
-	node *head;
-	node *tail;
-
-public:
-	explicit dualink();
-	~dualink();
-	//pushes
-	void push_head(item);
-	void push_tail(item);
-	//pops
-	item pop_head(void);
-	item pop_tail(void);
-	//inserters
-	//void insert(item, long);
-	//removers
-	//item remove(long);
-	//deleters
-	//void delete(long);
-	//accesors $ mutators
-	//item get_item(long);
-	//void set_item(item , long);
-};
-
-
-
-template <class item>
-dualink<item>::dualink() {
-	slider = tail = head = NULL;
-}
-
-template <class item>
-dualink<item>::~dualink() {
-	/*node *front = head;
-	node *back = tail;
-	for ( ; head != tail; ) {
-		front = head->prev;
-		delete head;
-		head = front;
-		back = tail->next;
-		delete tail;
-		tail = back;
-	}
-	delete head;*/
-}
-
-template <class item>
-void dualink<item>::push_head(item value)
-{
-	struct node *newnode = new node;
-	newnode.item_value = value;
-	newnode->next = NULL;
-	newnode->prev = head;
-	head = newnode;
-	position++;
-}
-
-template <class item>
-void dualink<item>::push_tail(item)
-{
-	struct node *newnode = new node;
-	newnode.item_value = value;
-	newnode->next = tail;
-	newnode->prev = NULL;
-	tail = newnode;
-	position++;
-}
-
-template <class item>
-item dualink<item>::pop_head(void)
-{
-	if (head) {
-	item value = head.item_value;
-	node *temp = head->prev;
-	delete head;
-	head = temp;
-	position--;
-	return value;
-	}
-	else {
-		std::cout << "no more elements" << std::endl;
-		return item(exit(EXIT_FAILURE));
-	}
-}
-
-template<class item>
-item dualink<item>::pop_tail(void)
-{
-	if (tail) {
-		item value = tail.item_value;
-		node *temp = tail->next;
-		delete tail;
-		tail = temp;
-		position--;
-		return value;
-	}
-	else {
-		std::cout << "no more elements" << std::endl;
-		return item(exit(EXIT_FAILURE));
-	}
-}
-
-
-int main()
-{
-	dualink<int> dll;
-	dll.push_head(5);
-	dll.push_head(10);
-	dll.push_tail(15);
-	dll.pop_head();
-	dll.pop_tail();
-
-    return 0;
-}
-
-
-
-
-// double.cpp: определяет точку входа для консольного приложения.
-//
-
 // double.cpp: определяет точку входа для консольного приложения.
 //
 
@@ -154,72 +20,201 @@ class DoubleList : public node<item> {
 private:
 	node<item> *head;
 	node<item> *tail;
-	//int const lsize = 0;
+	int size;
 public:
 	DoubleList();
+	~DoubleList();
 	void push_head(item);
 	void push_tail(item);
 	item pop_head(void);
 	item pop_tail(void);
 	void print(void);
+	node<item>* getNode(int);
+	void insert(int, item);
+	item remove(int);
 };
 
 template <class item>
 DoubleList<item>::DoubleList() {
-	head = tail = NULL;
-	//node<item> *nod = new node<item>(NULL, NULL, NULL);
-	//head = tail;
-	//tail->prev = head;
-	//head->next = tail;
+		size = 0;
+		head = tail = NULL;
+		
+}
+
+template <class item>
+DoubleList<item>::~DoubleList() {
+	node<item> *tmp = this->head;
+	node<item> *next = NULL;
+	while (tmp) {
+		next = tmp->next;
+		delete tmp;
+		tmp = next;
+	}
+	delete this;
+	//this = NULL;
 }
 
 template <class item>
 void DoubleList<item>::push_head(item value) {
-	if (head != NULL) {
-		head = new node<item>(value, head, NULL);
+	node<item> *tmp = new node<item>;
+	if (tmp == NULL) {
+		exit(1);
 	}
-	else {
-		node<item> *nod = new node<item>(value, NULL, NULL);
-		head = tail = nod;
+	tmp->value = value;
+	tmp->next = this->head;
+	tmp->prev = NULL;
+	if (this->head) {
+		this->head->prev = tmp;
 	}
+	this->head = tmp;
+
+	if (this->tail == NULL) {
+		this->tail = tmp;
+	}
+	this->size++;
 }
 
 template <class item>
 void DoubleList<item>::push_tail(item value) {
-	if (tail != NULL) {
-		tail = new node<item>(value, NULL, tail);
+	node<item> *tmp = new node<item>;
+	if (tmp == NULL) {
+		exit(3);
 	}
-	else {
-		node<item> *nod = new node<item>(value, NULL, NULL);
-		head = tail = nod;
+	tmp->value = value;
+	tmp->next = NULL;
+	tmp->prev = this->tail;
+	if (this->tail) {
+		this->tail->next = tmp;
 	}
+	this->tail = tmp;
+
+	if (this->head == NULL) {
+		this->head = tmp;
+	}
+	this->size++;
 }
 
 template <class item>
 item DoubleList<item>::pop_head(void) {
-	item val = head->value;
-	node<item> *tmpn = head->next;
-	delete head;
-	head = tmpn;
-	return val;
+	node<item> *prev;
+	item tmp;
+	if (this->head == NULL) {
+		exit(2);
+	}
+
+	prev = this->head;
+	this->head = this->head->next;
+	if (this->head) {
+		this->head->prev = NULL;
+	}
+	if (prev == this->tail) {
+		this->tail = NULL;
+	}
+	tmp = prev->value;
+	delete prev;
+
+	this->size--;
+	return tmp;
 }
 
 template <class item>
 item DoubleList<item>::pop_tail(void) {
-	item val = tail->value;
-	node<item> *tmpn = tail->prev;
-	delete tail;
-	tail = tmpn;
-	return val;
+	node<item> *next;
+	item tmp;
+	if (this->tail == NULL) {
+		exit(4);
+	}
+
+	next = this->tail;
+	this->tail = this->tail->prev;
+	if (this->tail) {
+		this->tail->next = NULL;
+	}
+	if (next == this->head) {
+		this->head = NULL;
+	}
+	tmp = next->value;
+	free(next);
+
+	this->size--;
+	return tmp;
 }
 
 template <class item>
 void DoubleList<item>::print(void) {
-	for (node<item> *curr = head; curr; curr = curr->next) {
+	for (node<item> *tmp = this->head; tmp; tmp = tmp->next) {
+		std::cout << tmp->value << " ";
 	}
 	std::cout << std::endl;
 }
 
+template <class item>
+node<item>* DoubleList<item>::getNode(int index) {
+	node<item> *tmp = this->head;
+	int i = 0;
+
+	while (tmp && i < index) {
+		tmp = tmp->next;
+		i++;
+	}
+
+	return tmp;
+}
+template <class item>
+void DoubleList<item>::insert(int index, item value) {
+	Node *elem = NULL;
+	Node *ins = NULL;
+	elem = DoubleList<item>::getNode(index);
+	if (elem == NULL) {
+		exit(5);
+	}
+	ins = new node<item>;
+	ins->value = value;
+	ins->prev = elem;
+	ins->next = elem->next;
+	if (elem->next) {
+		elem->next->prev = ins;
+	}
+	elem->next = ins;
+
+	if (!elem->prev) {
+		this->head = elem;
+	}
+	if (!elem->next) {
+		this->tail = elem;
+	}
+
+	this->size++;
+}
+template <class item>
+item DoubleList<item>::remove(int index) {
+	node<item> *elem = NULL;
+	void *tmp = NULL;
+	elem = DoubleList<item>::getNode(index);
+	if (elem == NULL) {
+		exit(5);
+	}
+	if (elem->prev) {
+		elem->prev->next = elem->next;
+	}
+	if (elem->next) {
+		elem->next->prev = elem->prev;
+	}
+	tmp = elem->value;
+
+	if (!elem->prev) {
+		this->head = elem->next;
+	}
+	if (!elem->next) {
+		this->tail = elem->prev;
+	}
+
+	delete elem;
+
+	this->size--;
+
+	return tmp->value;
+}
 
 
 int main()
@@ -236,10 +231,9 @@ int main()
 	dl.print();
 	//int poph = dl.pop_head();
 	//int popt = dl.pop_tail();
-	std::cout << dl.pop_tail() << dl.pop_tail() << dl.pop_tail() << dl.pop_tail() << std::endl;
+	std::cout << dl.pop_tail() << dl.pop_head() << dl.pop_head() << dl.pop_tail() << std::endl;
 	dl.print();
 	std::cin.get();
 	return 0;
 }
-
 
