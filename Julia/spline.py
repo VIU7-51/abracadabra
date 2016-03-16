@@ -1,6 +1,8 @@
 import random
 from collections import namedtuple
 
+Spline = namedtuple('Spline', ['a', 'b', 'c', 'd', 'x'])
+
 def create_table(f, range_=15):
     n = 100
     x = [random.uniform(0, range_) for i in range(n)]
@@ -11,12 +13,7 @@ def create_table(f, range_=15):
 def spline(x):
     X, Y = create_table(lambda x: x**2)
     n = len(X)
-    a, b, c, d = find_coef(X, Y)
-
-    Spline = namedtuple('Spline', ['a', 'b', 'c', 'd', 'x'])
-    splines = []
-    for i in range(n):
-        splines.append(Spline(a[i], b[i], c[i], d[i], X[i]))
+    splines = find_splines(X, Y)
 
     s = Spline(0,0,0,0,0)
     if x < X[0]:
@@ -30,23 +27,27 @@ def spline(x):
                 break
 
     dx = x - s.x
-    return s.a + s.b*dx + s.c/2.0*dx**2 + s.d/6.0*dx**3
+    return s.a + s.b * dx + s.c/2.0 * dx**2 + s.d/6.0 * dx**3
 
 
 
-def find_coef(X, Y):
+def find_splines(X, Y):
+    n = len(X)
     xi, eta = find_helpers(X, Y)
-    c = [0.0]*len(X)
-    d = [0.0]*len(X)
-    b = [0.0]*len(X)
-    for i in range(len(X)-2, 0, -1):
+    c = [0.0]*n
+    d = [0.0]*n
+    b = [0.0]*n
+    for i in range(n-2, 0, -1):
         c[i] = (xi[i] * c[i+1] + eta[i])
-    for i in range(len(X)-1, 0, -1):
+    for i in range(n-1, 0, -1):
         hi = (X[i] - X[i-1])
         d[i] = (c[i] - c[i-1]) / hi
         b[i] = ((Y[i] - Y[i-1]) / hi + hi * (c[i-1] + 2 * c[i]) / 6.)
-    return Y[:], b, c, d
 
+    splines = []
+    for i in range(n):
+        splines.append(Spline(Y[i], b[i], c[i], d[i], X[i]))
+    return splines
 
 def find_helpers(X, Y):
     F = find_F(X, Y)
