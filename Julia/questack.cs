@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Program
 {
@@ -9,15 +7,16 @@ namespace Program
     {
         public int NumReq { get; protected set; }
         public int MaxSize { get; protected set; }
+        public bool IsFull { get { return NumReq == MaxSize; } }
+        public bool IsEmpty { get { return NumReq == 0; } }
         public virtual void AddReq(Request req){}
         public virtual bool RemoveReq(out Request req){req = new Request(); return false;}
     }
 
     abstract class Queue : CommonPool
     {
-        private int head, tail;
-        protected int FirstReq {get {return head;} set {head = value % MaxSize; } }
-        protected int LastReq { get { return tail; } set{ tail = value % MaxSize;} }
+        protected int FirstReq { get; set; }
+        protected int LastReq { get; set; }
 
         public Queue()
         {
@@ -25,10 +24,6 @@ namespace Program
             FirstReq = 0;
             LastReq = -1;
         }
-
-        public bool IsFull { get { return NumReq == MaxSize; } }
-
-        public bool IsEmpty { get { return NumReq == 0; } }
     }
 
     sealed class QueueArr : Queue
@@ -53,7 +48,7 @@ namespace Program
         {
             if (IsFull) return;
             NumReq++;
-            LastReq += 1;
+            LastReq = (LastReq + 1) % MaxSize;
             Pool[LastReq] = req;
         }
 
@@ -63,7 +58,7 @@ namespace Program
             if (IsEmpty) return false;
           	NumReq--;
             req = Pool[FirstReq];
-            FirstReq += 1;
+            FirstReq = (FirstReq + 1) % MaxSize;
             return true;
         }
     }
@@ -101,6 +96,91 @@ namespace Program
             NumReq--;
             req = Pool[FirstReq];
             Pool.RemoveAt(FirstReq);
+            LastReq -= 1;
+            return true;
+        }
+    }
+
+    abstract class Stack : CommonPool
+    {
+        protected int LastReq { get; set; }
+        public Stack()
+        {
+            MaxSize = 5;
+            LastReq = -1;
+        }
+    }
+
+    sealed class StackArr : Stack
+    {
+        public new Request[] Pool;
+
+        public StackArr()
+        {
+            MaxSize = 5;
+            Pool = new Request[MaxSize];
+            NumReq = 0;
+        }
+
+        public StackArr(int _MaxSize)
+        {
+            MaxSize = _MaxSize;
+            Pool = new Request[MaxSize];
+            NumReq = 0;
+        }
+
+        public override void AddReq(Request req)
+        {
+            if (IsFull) return;
+            NumReq++;
+            LastReq = (LastReq + 1) % MaxSize;
+            Pool[LastReq] = req;
+        }
+
+        public override bool RemoveReq(out Request req)
+        {
+          	req = new Request();
+            if (IsEmpty) return false;
+          	NumReq--;
+            req = Pool[LastReq];
+            LastReq = (LastReq - 1) % MaxSize;
+            return true;
+        }
+    }
+
+    sealed class StackLst : Stack
+    {
+        public new List<Request> Pool;
+
+        public StackLst()
+        {
+            MaxSize = 5;
+            NumReq = 0;
+            Pool = new List<Request>();
+        }
+
+        public StackLst(int _MaxSize)
+        {
+            MaxSize = _MaxSize;
+            NumReq = 0;
+            Pool = new List<Request>();
+        }
+
+        public override void AddReq(Request req)
+        {
+            if (IsFull) return;
+            Pool.Add(req);
+            NumReq++;
+            LastReq += 1;
+        }
+
+        public override bool RemoveReq(out Request req)
+        {
+            req = new Request();
+            if (IsEmpty) return false;
+            NumReq--;
+            req = Pool[LastReq];
+            Pool.RemoveAt(LastReq);
             LastReq -= 1;
             return true;
         }
