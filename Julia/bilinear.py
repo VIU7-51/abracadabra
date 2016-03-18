@@ -37,7 +37,8 @@ def interpolate(x, data, n):
         step += 1
     return sum(result)
 
-def bilinear_int(f, x, y, n=3):
+def bilinear_int(x, y, n=3):
+    f = lambda x, y: 2*x + 3*y
     allX, allY = create_xy()
     X = choose_data(x, allX, n)
     Y = choose_data(y, allY, n)
@@ -49,6 +50,5 @@ def bilinear_int(f, x, y, n=3):
 
 
 if __name__ == '__main__':
-    f = lambda x, y: 2*x + 3*y
-    print 'x=3, y=16, z=', bilinear_int(f, 3.145, 16.543)
+    print 'x=3, y=16, z=', bilinear_int(3.145, 16.543)
     print 'real answer = ', 2*3.145+16.543*3
