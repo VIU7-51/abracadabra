@@ -6,31 +6,29 @@ def create_table(f, length=25):
     y = [f(x[i]) for i in range(length)]
     return [x, y]
 
-
-def get_table(x, n, table):
-    for i in range(len(table[0])):
-        if x == table[0][i]:
-            return table[1][i]
-        if x < table[0][i] and n%2 == 0:
-            x = [table[0][j] for j in range(i-n/2-1,i+n/2)]
-            y = [table[1][j] for j in range(i-n/2-1,i+n/2)]
+def get_data(x, table, n=3):
+    assert(n < len(table[0]))
+    X, Y = table[0], table[1]
+    nodes = n + 1
+    for i in range(len(X)):
+        if x == X[i]:
+            return Y[i]
+        if x > X[i] and n%2 == 0:
+            x = [X[j] for j in range(i-nodes/2,i+nodes/2+1)]
+            y = [Y[j] for j in range(i-nodes/2,i+nodes/2+1)]
             return x, y
-        if x < table[0][i] and n%2 != 0:
-            x = [table[0][j] for j in range(i-n/2-1,i+n/2+1)]
-            y = [table[1][j] for j in range(i-n/2-1,i+n/2+1)]
+        if x > X[i] and n%2 != 0:
+            x = [X[j] for j in range(i-nodes/2,i+nodes/2)]
+            y = [Y[j] for j in range(i-nodes/2,i+nodes/2)]
             return x, y
 
-
-def interpolate(x, n, length=25):
-    data = create_table(lambda x: x**2, length)
-    if x > data[0][-n/2-1]:
-        return "need bigger table"
-    X, Y = get_table(x, n, data)
+def interpolate(x, data, n=3):
+    X, Y = data[0], data[1]
     step = 1
     Y = [Y]
     result = [Y[0][0]]
     for i in range(1, n+1):
-        Y.append(list())
+        Y.append([])
         for j in range(n):
             if j + step > n:
                 break
@@ -41,11 +39,10 @@ def interpolate(x, n, length=25):
         step += 1
     return sum(result)
 
-
-print "x = 2.5 answer = ",interpolate(2.5, 2)
-print "x = 5.6458 answer = ", interpolate(5.6458, 3)
-print "x = 0.345 answer = ", interpolate(0.345, 3)
-print "x = 23.45 answer = ", interpolate(23.45, 3)
-print "x = 23.45 answer = ",interpolate(23.45, 3, 30)
-#table = create_table(lambda x: x**2, 100)
-#print get_table(10, 4, table)
+if __name__ == '__main__':
+    f = lambda a: a**2
+    table = create_table(f)
+    x = float(raw_input('Enter x='))
+    n = int(raw_input('Enter n='))
+    data = get_data(x, table, n)
+    print 'y = %f real y = %f' % (interpolate(x, data, n), f(x))
