@@ -3,15 +3,14 @@ from collections import namedtuple
 
 Spline = namedtuple('Spline', ['a', 'b', 'c', 'd', 'x'])
 
-def create_table(f, range_=15):
-    n = 100
-    x = [random.uniform(0, range_) for i in range(n)]
+def create_table(f, length=100):
+    x = [random.uniform(0, length/2) for i in range(length)]
     x.sort()
-    y = [f(x[i]) for i in range(n)]
+    y = [f(x[i]) for i in range(length)]
     return [x, y]
 
-def spline(x):
-    X, Y = create_table(lambda x: x**2)
+def spline(x, data):
+    X, Y = data[0], data[1]
     n = len(X)
     splines = find_splines(X, Y)
 
@@ -25,11 +24,8 @@ def spline(x):
             if X[i] > x:
                 s = splines[i]
                 break
-
     dx = x - s.x
     return s.a + s.b * dx + s.c/2.0 * dx**2 + s.d/6.0 * dx**3
-
-
 
 def find_splines(X, Y):
     n = len(X)
@@ -69,6 +65,8 @@ def find_F(X, Y):
         F[i] = 6.*((Y[i+1]-Y[i])/hi1 - (Y[i]-Y[i-1])/hi)
     return F
 
-
 if __name__ == '__main__':
-    print spline(2.5)
+    f = lambda x: x**2
+    data = create_table(f)
+    x = float(raw_input('Enter x='))
+    print spline(x, data)
