@@ -9,15 +9,23 @@ def create_xy(length=30):
     return [x, y]
 
 def choose_data(x, table, n):
+    nodes = n + 1
     for i in range(len(table)):
         if x == table[i]:
             return table[i]
         if x < table[i] and n%2 == 0:
-            data = [table[j] for j in range(i-n/2-1,i+n/2)]
+            data = [table[j] for j in range(i-nodes/2,i+nodes/2+1)]
             return data
         if x < table[i] and n%2 != 0:
-            data = [table[j] for j in range(i-n/2-1,i+n/2+1)]
+            data = [table[j] for j in range(i-nodes/2,i+nodes/2)]
             return data
+
+def bilinear_int(x, y, data, n=3):
+    X, Y, Z = data[0], data[1], data[2]
+    int_XZ = []
+    for i in range(n+1):
+        int_XZ.append(interpolate(x, [X, Z[i]], n))
+    return interpolate(y, [Y, int_XZ], n)
 
 def interpolate(x, data, n):
     X = data[0]
@@ -37,18 +45,17 @@ def interpolate(x, data, n):
         step += 1
     return sum(result)
 
-def bilinear_int(x, y, n=3):
-    f = lambda x, y: 2*x + 3*y
+if __name__ == '__main__':
+    f = lambda a, b: a**2 + b**2
+
+    x = float(raw_input('Enter x='))
+    y = float(raw_input('Enter y='))
+    n = int(raw_input('Enter n='))
+
     allX, allY = create_xy()
     X = choose_data(x, allX, n)
     Y = choose_data(y, allY, n)
-    int_XZ = []
-    for i in range(n+1):
-        z = [f(X[j], Y[i]) for j in range(len(X))]
-        int_XZ.append(interpolate(x, [X, z], n))
-    return interpolate(y, [Y, int_XZ], n)
+    Z = [[f(X[j],Y[i]) for j in range(n+1)] for i in range(n+1)]
 
-
-if __name__ == '__main__':
-    print 'x=3, y=16, z=', bilinear_int(3.145, 16.543)
-    print 'real answer = ', 2*3.145+16.543*3
+    print 'x=%f, y=%f, z=%f' %(x, y, bilinear_int(x, y, [X,Y,Z], n))
+    print 'real answer = ', f(x,y)
