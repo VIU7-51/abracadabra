@@ -7,10 +7,14 @@ struct Node {
     T value;
     Node *left;
     Node *right;
+    Node *parent;
 
     Node(){}
     Node(T val) {
         this->value = val;
+        this->left = NULL;
+        this->right = NULL;
+
     }
 };
 
@@ -23,12 +27,14 @@ class BST {
         if (root->value > val) {
             if (!root->left) {
                 root->left = new Node<T>(val);
+                root->left->parent = root;
             } else {
                 add_node(root->left, val);
             }
         } else {
             if (!root->right) {
                 root->right = new Node<T>(val);
+                root->right->parent = root;
             } else {
                 add_node(root->right, val);
             }
@@ -56,14 +62,37 @@ class BST {
         else {
             if (node->left && node->right) {
                 Node<T> *tmp = find_min(node->right);
+                cout<<node->value<<"\n";
                 remove(tmp->value, node->right);
+                if (node->parent->left == node)
+                    node->parent->left = tmp;
+                else
+                    node->parent->right = tmp;
+                tmp->left = node->left;
                 node = tmp;
             }
             else if (node->left) {
+                cout<<node->value<<" left\n";
+                if (node->parent->left == node)
+                    node->parent->left = node->left;
+                else
+                    node->parent->right = node->left;
                 node = node->left;
             }
             else if (node->right) {
+                cout<<node->value<<" right\n";
+                if (node->parent->left == node)
+                    node->parent->left = node->right;
+                else
+                    node->parent->right = node->right;
                 node = node->right;
+            }
+            else {
+                cout<<node->value<<" just\n";
+                if (node->parent->left == node)
+                    node->parent->left = NULL;
+                else
+                    node->parent->right = NULL;
             }
             return true;
         }
@@ -136,7 +165,11 @@ int main() {
     bst->insert(21);
     bst->insert(5);
     bst->insert(7);
+    bst->insert(4);
     bst->insert(11);
+    bst->print();
+    cout<<"\n";
+    bst->remove(11);
     bst->print();
     return 0;
 }
