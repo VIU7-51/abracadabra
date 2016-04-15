@@ -144,6 +144,15 @@ class BST {
     bool remove(T value) {
         if (root == NULL)
             return false;
+        else if (root->value == value) {
+            Node<T> *auxRoot = find_min(root->right);
+            auxRoot->parent->left = NULL;
+            auxRoot->parent = NULL;
+            auxRoot->left = root->left;
+            auxRoot->right = root->right;
+            root = auxRoot;
+            return true;
+        }
         else
             return remove(value, root);
     }
@@ -169,7 +178,9 @@ int main() {
     bst->insert(11);
     bst->print();
     cout<<"\n";
-    bst->remove(11);
+    bst->remove(10);
     bst->print();
+    cout<<"\n";
+    cout<<bst->search(21)->value<<" \n";
     return 0;
 }
